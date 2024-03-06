@@ -18,8 +18,8 @@ export class FileUploadRoutes {
     // Definir las rutas
     // api/upload/single/<user|category|product>/
     // api/upload/multiple/<user|category|product>/
-    router.get( '/single/:type', controller.uploadFile );
-    router.get( '/multiple/:type',controller.uploadMultileFiles );
+    router.post( '/single/:type', controller.uploadFile );
+    router.post( '/multiple/:type',controller.uploadMultileFiles );
 
     return router;
   }
