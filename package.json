@@ -7,8 +7,7 @@
     "dev": "tsnd --respawn --clear src/app.ts",
     "build": "rimraf ./dist && tsc",
     "start": "npm run build && node dist/app.js",
-    "ionic:build": "npm run build",
-    "ionic:serve": "npm run start"
+    "seed": "ts-node-dev ./src/data/seed/seed.ts"
   },
   "keywords": [],
   "author": "",
