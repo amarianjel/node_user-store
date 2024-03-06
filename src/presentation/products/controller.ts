@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
-import { CustomError, PaginationDto } from "../../domain";
+import { CreateProductDto, CustomError, PaginationDto } from "../../domain";
+import { ProductService } from "../services";
 
 export class ProductController {
 
   // DI
     constructor(
-        // TODO : private readonly productService: ProductService
+        private readonly productService: ProductService
     ) { }
 
     private handleError = (error: unknown, res: Response ) => {
@@ -17,16 +18,27 @@ export class ProductController {
         return res.status(500).json({ error: 'Internal server error' })
     }
 
-    createProduct = ( req: Request, res: Response ) => {
-        return res.json('Creado producto')
+    createProduct = async( req: Request, res: Response ) => {
+        const [ error, createProductDto ] = CreateProductDto.create({ 
+            ...req.body,
+            // user: req.body.user.id,
+        });
+        if ( error ) return res.status( 400 ).json( { error } );
+        
+        
+        this.productService.createProduct( createProductDto! )
+        .then( category => res.status( 201 ).json( category ) )
+        .catch( error => this.handleError( error, res ) );
     }
 
-    getProduct = ( req: Request, res: Response ) => {
+    getProduct = async( req: Request, res: Response ) => {
 
         const { page = 1, limit = 10 } = req.query;
         const [ error, paginationDto ] = PaginationDto.create( +page, +limit );
         if ( error ) return res.status(400).json({ error });
         
-        return res.json('Obtenido producto')
+        this.productService.getProducts( paginationDto! )
+        .then( products => res.json( products ))
+        .catch( error => this.handleError( error, res ) );
     }
 }
