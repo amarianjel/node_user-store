@@ -18,7 +18,7 @@ export class CategoryController {
     } 
 
     createCategory = async( req: Request, res: Response ) => {
-        
+
         const [ error, createCategoryDto ] = CreateCategoryDto.create( req.body )
         if ( error ) return res.status(400).json({ error });
 
@@ -28,6 +28,11 @@ export class CategoryController {
     }
 
     getCategories = async( req: Request, res: Response ) => {
-        res.json( ' Categoria obtenida ')
+        
+        // if ( error ) return res.status(400).json({ error });
+    
+        this.categoryService.getCategories()
+            .then( categories => res.json( categories ))
+            .catch( error => this.handleError( error, res ) );
     }
 }
