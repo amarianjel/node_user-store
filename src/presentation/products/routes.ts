@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { ProductController } from "./controller";
 import { ProductService } from "../services";
+import { AuthMiddleware } from "../middlewares/auth.middleware";
 
 export class ProductRoutes{
     static get routes(): Router {
@@ -10,7 +11,7 @@ export class ProductRoutes{
         const controller = new ProductController( productService );
 
         router.get( '/', controller.getProduct );
-        router.post( '/', controller.createProduct );
+        router.post( '/', [AuthMiddleware.validateJWT],controller.createProduct );    //*Debe pasar para poder obtener el id del usuario, solo para CREAR
 
         return router;
     }
